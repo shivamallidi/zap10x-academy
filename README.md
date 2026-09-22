@@ -1,8 +1,5 @@
 # ZAP10X Academy - System Design & Database Documentation
 
-**Prepared for:** CEO review
-**Scope:** Backend (Django/DRF + MySQL), as built to date
-**Status:** Living document - reflects the codebase at the time of writing, not a future plan
 
 ---
 
