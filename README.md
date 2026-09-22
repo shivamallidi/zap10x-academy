@@ -89,8 +89,6 @@ The platform does not use Django's built-in permission system. Instead:
 
 ## 4. Database Design
 
-**31 tables total.** No migrations - every table is created and altered by hand-written SQL, applied identically to every environment.
-
 **Universal convention:** every table has a `status` column (`1` = active, `0` = soft-deleted). Rows are never hard-deleted by the application. Because of this, natural keys (email, slug, code) are **not** database-enforced-unique - re-registering a value after its old row was soft-deleted must remain possible - so uniqueness among active rows is enforced in application code instead.
 
 ### 4.1 Table groups
