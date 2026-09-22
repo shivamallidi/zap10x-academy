@@ -65,8 +65,8 @@ Three environments - dev, test, prod
 Login is via password **or** email OTP; both issue the same JWT pair (access + refresh token).
 
 - **Access tokens** are short-lived (15 minutes) and fully stateless - verified by signature and expiry only, no database lookup.
-- **Refresh tokens** are longer-lived and also verified by signature alone. **No table stores issued tokens.** This is a deliberate choice: it removes an entire class of database load (a write on every login) at the cost of not being able to force-revoke a single session early - logout, a role change, or a leaked token all take effect once the current access token expires (worst case: 15 minutes), not instantly. This trade-off is documented and was a deliberate decision, not an oversight.
-- The authentication class (`accounts.authentication.JWTAuthentication`) is custom-built rather than using the standard library's default, specifically so it does not depend on Django's built-in user model - it loads the platform's own `User` row directly from the token's claims.
+- **Refresh tokens** are longer-lived and also verified by signature alone. **No table stores issued tokens.** 
+
 
 ### 3.2 Passwords and OTP codes - what's hashed, what isn't
 
@@ -80,10 +80,9 @@ Login is via password **or** email OTP; both issue the same JWT pair (access + r
 
 The platform does not use Django's built-in permission system. Instead:
 
-- **Roles** (7 seeded: Super Admin, University Admin, College Admin, Faculty, Content Author, Student, Individual Learner) are granted to a user **at a specific scope** - e.g. "University Admin, scoped to VTU only" or "Faculty, scoped to one specific college."
+- **Roles** (7 seeded: Super Admin(Zap 10X), University Admin, College Admin, Faculty, Content Author, Student, Individual Learner) are granted to a user **at a specific scope** - e.g. "University Admin, scoped to VTU only" or "Faculty, scoped to one specific college."
 - **Permissions** (44 seeded, e.g. `college.edit`, `course.create`, `grades.edit`) are attached to roles.
-- Scopes are hierarchical: a grant at the University level automatically covers every college under that university, without a separate row per college.
-- Every protected API endpoint checks a specific permission code via a shared `HasPermission(code)` check - the same logic is never duplicated per-endpoint. List endpoints additionally filter results to only the scopes the caller actually has access to, rather than returning everything and hiding rows.
+- Every protected API endpoint checks a specific permission code via a shared `HasPermission(code)` check - the same logic is never duplicated per-endpoint. 
 
 ---
 
